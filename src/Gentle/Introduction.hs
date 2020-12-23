@@ -88,6 +88,8 @@ module Gentle.Introduction (
     for_, traverse_,
     and, or,
     all, any,
+    -- * Data.Foldable.WithIndex
+    FoldableWithIndex (..), ifor_, itraverse_, itoList,
     -- * Data.Function
     (&),
     -- * Data.Functor
@@ -100,6 +102,8 @@ module Gentle.Introduction (
     Contravariant (..), (>$<),
     -- * Data.Functor.Identity
     Identity (..),
+    -- * Data.Functor.WithIndex
+    FunctorWithIndex (..),
     -- * Data.Hashable
     Hashable,
     -- * Data.Int
@@ -107,7 +111,7 @@ module Gentle.Introduction (
     -- * Data.Kind
     Type, Constraint,
     -- * Data.List
-    chunksOf,
+    chunksOf, dropWhileEnd,
     -- * Data.List.NonEmpty
     NonEmpty (..),
     groupBy, head, last, some1,
@@ -154,6 +158,8 @@ module Gentle.Introduction (
     Traversable (traverse, sequenceA),
     for,
     fmapDefault, foldMapDefault,
+    -- * Data.Traversable.WithIndex
+    TraversableWithIndex (..), ifor,
     -- * Data.Type.Equality
     (:~:) (..),
     -- * Data.Universe.Class
@@ -167,19 +173,6 @@ module Gentle.Introduction (
     -- * Debug.Trace
     -- | These functions are marked as deprecated
     traceShow, traceShowId,
-    -- * Optics
-    (%),
-    (^.), (^?),
-    (.~), (?~), (%~),
-    _1, _2,
-    Ixed (..), At (..),
-    coerced,
-    folded,
-    setOf,
-    _Just,
-    -- ** Indexed Functors
-    itraverse, itraverse_,
-    ifor, ifor_,
     -- * GHC.Stack
     HasCallStack,
     -- * Numeric.Natural
@@ -250,27 +243,30 @@ import Data.Char                  (isAlpha, isAlphaNum, isDigit, isLower, isNumb
 import Data.Coerce                (Coercible, coerce)
 import Data.Fix                   (Fix (..))
 import Data.Foldable              (Foldable (..), all, and, any, for_, notElem, or, traverse_)
+import Data.Foldable.WithIndex    (FoldableWithIndex (..), ifor_, itoList, itraverse_)
 import Data.Function              ((&))
 import Data.Functor               ((<&>))
 import Data.Functor.Compose       (Compose (..))
 import Data.Functor.Const         (Const (..))
 import Data.Functor.Contravariant (Contravariant (..), (>$<))
 import Data.Functor.Identity      (Identity (..))
+import Data.Functor.WithIndex     (FunctorWithIndex (..))
 import Data.Hashable              (Hashable)
 import Data.Int                   (Int16, Int32, Int64, Int8)
 import Data.Kind                  (Constraint, Type)
+import Data.List                  (dropWhileEnd)
 import Data.List.NonEmpty         (NonEmpty (..), groupBy, head, last, some1)
 import Data.Map                   (Map)
 import Data.Maybe                 (fromMaybe, isJust, isNothing, listToMaybe, maybeToList)
 import Data.Monoid                (Monoid (..))
 import Data.Proxy                 (Proxy (..))
-import Data.SOP                   (I (..), K (..), NP (..), NS (..), SListI)
 import Data.Scientific            (Scientific)
 import Data.Semialign             (Align (..), Repeat (..), Semialign (..), Zip (..))
 import Data.Semigroup             (Semigroup (..))
 import Data.Semigroup.Generic     (gmappend, gmempty)
 import Data.Set                   (Set)
 import Data.Some.GADT             (Some (..))
+import Data.SOP                   (I (..), K (..), NP (..), NS (..), SListI)
 import Data.Strict                (Strict (..))
 import Data.String                (IsString (..))
 import Data.Tagged                (Tagged (..))
@@ -278,9 +274,10 @@ import Data.Text                  (Text)
 import Data.These                 (These (..))
 import Data.Time.Compat           (Day, UTCTime)
 import Data.Traversable           (Traversable (..), fmapDefault, foldMapDefault, for)
+import Data.Traversable.WithIndex (TraversableWithIndex (..), ifor)
 import Data.Type.Equality         ((:~:) (..))
-import Data.UUID.Types            (UUID)
 import Data.Universe.Class        (Finite (..), Universe (..))
+import Data.UUID.Types            (UUID)
 import Data.Void                  (Void, absurd)
 import Data.Word                  (Word16, Word32, Word64, Word8)
 import GHC.Generics               (Generic, Generic1)
@@ -289,10 +286,6 @@ import Numeric.Natural            (Natural)
 import Text.Read                  (readMaybe)
 import Type.Reflection            (TypeRep, Typeable, typeRep)
 
-import Data.Set.Optics (setOf)
-import Optics.Core
-       (At (..), Ixed (..), _1, _2, _Just, coerced, folded, ifor, ifor_, itraverse, itraverse_, (%), (%~), (.~), (?~), (^.), (^?))
-
 import Distribution.Utils.Generic (fromUTF8BS, fromUTF8LBS, toUTF8BS, toUTF8LBS)
 
 import qualified Data.Text                as T
@@ -300,8 +293,8 @@ import qualified Data.Text.Encoding       as TE
 import qualified Data.Text.Encoding.Error as TEE
 import qualified Debug.Trace              as Trace
 
+import Data.Functor.WithIndex.Instances ()
 import Data.Orphans ()
-import Optics.Extra ()
 
 import qualified Prelude as P
 
@@ -371,3 +364,26 @@ traceShow = Trace.traceShow
 traceShowId :: Show a => a -> a
 traceShowId = Trace.traceShowId
 {-# DEPRECATED traceShowId "Don't leave me here" #-}
+
+-------------------------------------------------------------------------------
+-- Optics
+-------------------------------------------------------------------------------
+
+{-
+    -- * Optics
+    (%),
+    (^.), (^?),
+    (.~), (?~), (%~),
+    _1, _2,
+    Ixed (..), At (..),
+    coerced,
+    folded,
+    setOf,
+    _Just,
+
+import Data.Set.Optics (setOf)
+import Optics.Core
+       (At (..), Ixed (..), coerced, folded, (%), (%~), (.~), (?~), (^.), (^?), _1, _2, _Just)
+import Optics.Extra ()
+
+-}
