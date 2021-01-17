@@ -2,11 +2,7 @@
 -- | /Gentle introduction/ is a collection of non-clashing names
 -- from Hackage.
 --
--- We try to not export non-generalised versions of combinators.
--- Therefore there is no @mapMaybe@ as it is generalised in @witherable@
--- and @filterable@ packages.
---
--- We also try to be explicit in exports.
+-- We try to be explicit in exports.
 -- In particular with "Prelude" and for type-classes which members have changed
 -- in different @base@ versions. This is one reason to keep base support window
 -- relatively short.
@@ -23,7 +19,7 @@ module Gentle.Introduction (
     Functor (fmap, (<$)), Monad (return, (>>=)), (<$>),
     -- ** List
     -- | ... almost
-    concat, concatMap, drop, dropWhile, filter, lines, map, replicate, reverse, span, take, takeWhile, unlines, unwords, words, (++),
+    concat, concatMap, drop, dropWhile, lines, map, replicate, reverse, span, take, takeWhile, unlines, unwords, words, (++),
     -- ** Booleans
     Bool (..), not, otherwise, (&&), (||),
     -- ** Numerics
@@ -170,6 +166,9 @@ module Gentle.Introduction (
     Void, absurd,
     -- * Data.Word
     Word8, Word16, Word32, Word64,
+    -- * Witherable
+    Filterable (..), FilterableWithIndex (..),
+    ordNub, ordNubOn, hashNub, hashNubOn,
     -- * Debug.Trace
     -- | These functions are marked as deprecated
     traceShow, traceShowId,
@@ -202,8 +201,7 @@ import Prelude (Either (..), Maybe (..), const, curry, either, flip, fst, id, ma
 import Prelude (Functor (..), Monad (return, (>>=)), (<$>))
 
 -- list
-import Prelude
-       (concat, concatMap, drop, dropWhile, filter, lines, map, replicate, reverse, span, take, takeWhile, unlines, unwords, words, (++))
+import Prelude (concat, concatMap, drop, dropWhile, lines, map, replicate, reverse, span, take, takeWhile, unlines, unwords, words, (++))
 
 -- boolean
 import Prelude (Bool (..), not, otherwise, (&&), (||))
@@ -285,6 +283,7 @@ import GHC.Stack                  (HasCallStack)
 import Numeric.Natural            (Natural)
 import Text.Read                  (readMaybe)
 import Type.Reflection            (TypeRep, Typeable, typeRep)
+import Witherable                 (Filterable (..), FilterableWithIndex (..), hashNub, hashNubOn, ordNub, ordNubOn)
 
 import Distribution.Utils.Generic (fromUTF8BS, fromUTF8LBS, toUTF8BS, toUTF8LBS)
 
@@ -364,26 +363,3 @@ traceShow = Trace.traceShow
 traceShowId :: Show a => a -> a
 traceShowId = Trace.traceShowId
 {-# DEPRECATED traceShowId "Don't leave me here" #-}
-
--------------------------------------------------------------------------------
--- Optics
--------------------------------------------------------------------------------
-
-{-
-    -- * Optics
-    (%),
-    (^.), (^?),
-    (.~), (?~), (%~),
-    _1, _2,
-    Ixed (..), At (..),
-    coerced,
-    folded,
-    setOf,
-    _Just,
-
-import Data.Set.Optics (setOf)
-import Optics.Core
-       (At (..), Ixed (..), coerced, folded, (%), (%~), (.~), (?~), (^.), (^?), _1, _2, _Just)
-import Optics.Extra ()
-
--}
