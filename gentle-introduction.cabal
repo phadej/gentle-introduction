@@ -1,6 +1,6 @@
 cabal-version: 2.2
 name:          gentle-introduction
-version:       2020.12
+version:       2021.1
 synopsis:      This is not a prelude, but rather a gentle introduction
 description:
   This gentle introduction re-exports a non-clashing set of names
@@ -59,3 +59,4 @@ library
     , unliftio-core                  ^>=0.2.0.1
     , unordered-containers           ^>=0.2.13.0
     , uuid-types                     ^>=1.0.3
+    , witherable            ^>=0.4.1
