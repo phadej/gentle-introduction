@@ -124,6 +124,8 @@ module Gentle.Introduction (
     Scientific,
     -- * Data.Semialign
     Semialign (alignWith, align), Zip (zipWith, zip), Align (nil), Repeat (repeat),
+    -- * Data.Semialign.Indexed
+    SemialignWithIndex (ialignWith), ZipWithIndex (izipWith), RepeatWithIndex (irepeat),
     -- * Data.Semigroup
     Semigroup ((<>)),
     gmempty, gmappend,
@@ -258,13 +260,14 @@ import Data.Map                   (Map)
 import Data.Maybe                 (fromMaybe, isJust, isNothing, listToMaybe, maybeToList)
 import Data.Monoid                (Monoid (..))
 import Data.Proxy                 (Proxy (..))
+import Data.SOP                   (I (..), K (..), NP (..), NS (..), SListI)
 import Data.Scientific            (Scientific)
 import Data.Semialign             (Align (..), Repeat (..), Semialign (..), Zip (..))
+import Data.Semialign.Indexed     (RepeatWithIndex (..), SemialignWithIndex (..), ZipWithIndex (..))
 import Data.Semigroup             (Semigroup (..))
 import Data.Semigroup.Generic     (gmappend, gmempty)
 import Data.Set                   (Set)
 import Data.Some.GADT             (Some (..))
-import Data.SOP                   (I (..), K (..), NP (..), NS (..), SListI)
 import Data.Strict                (Strict (..))
 import Data.String                (IsString (..))
 import Data.Tagged                (Tagged (..))
@@ -274,8 +277,8 @@ import Data.Time.Compat           (Day, UTCTime)
 import Data.Traversable           (Traversable (..), fmapDefault, foldMapDefault, for)
 import Data.Traversable.WithIndex (TraversableWithIndex (..), ifor)
 import Data.Type.Equality         ((:~:) (..))
-import Data.Universe.Class        (Finite (..), Universe (..))
 import Data.UUID.Types            (UUID)
+import Data.Universe.Class        (Finite (..), Universe (..))
 import Data.Void                  (Void, absurd)
 import Data.Word                  (Word16, Word32, Word64, Word8)
 import GHC.Generics               (Generic, Generic1)
