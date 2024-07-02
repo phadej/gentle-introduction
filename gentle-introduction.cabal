@@ -60,4 +60,4 @@ library
     , unliftio-core                  ^>=0.2.1.0
     , unordered-containers           ^>=0.2.20
     , uuid-types                     ^>=1.0.6
-    , witherable                     ^>=0.4.2
+    , witherable                     ^>=0.5
